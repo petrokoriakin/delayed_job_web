@@ -20,7 +20,7 @@ class DelayedJobWeb < Sinatra::Base
   end
 
   def per_page
-    20
+    4
   end
 
   def url_path(*path_parts)
@@ -43,6 +43,11 @@ class DelayedJobWeb < Sinatra::Base
     ]
   end
 
+
+  def backend
+    delayed_job.name.match(/mongoid/i).present? ? :mongoid : :active_record
+  end
+  
   def delayed_job
     begin
       Delayed::Job
@@ -66,7 +71,11 @@ class DelayedJobWeb < Sinatra::Base
 
   %w(enqueued working pending failed).each do |page|
     get "/#{page}" do
-      @jobs = delayed_jobs(page.to_sym).order('created_at desc').offset(start).limit(per_page)
+      if backend == :mongoid
+        @jobs = delayed_jobs(page.to_sym).order_by(:created_at.desc).skip(start).limit(per_page)
+      else
+        @jobs = delayed_jobs(page.to_sym).order('created_at desc').offset(start).limit(per_page)
+      end
       @all_jobs = delayed_jobs(page.to_sym)
       haml page.to_sym
     end
@@ -85,7 +94,7 @@ class DelayedJobWeb < Sinatra::Base
   end
 
   post "/failed/clear" do
-    delayed_job.destroy_all(delayed_job_sql(:failed))
+    delayed_jobs(:failed).delete_all
     redirect u('failed')
   end
 
@@ -95,9 +104,26 @@ class DelayedJobWeb < Sinatra::Base
   end
 
   def delayed_jobs(type)
-    delayed_job.where(delayed_job_sql(type))
+    if backend == :mongoid
+      criteria_for(type)
+    else
+      delayed_job.where(delayed_job_sql(type))
+    end
   end
 
+  def criteria_for(type)
+    case type
+    when :enqueued
+      delayed_job.all
+    when :working
+      delayed_job.where(:locked_at.exists => true)
+    when :failed
+      delayed_job.where(:last_error.exists => true)
+    when :pending
+      delayed_job.where(:attempts => 0)
+    end
+  end
+  
   def delayed_job_sql(type)
     case type
     when :enqueued
