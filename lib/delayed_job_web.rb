@@ -1,6 +1,6 @@
 require 'delayed_job_web/application/app'
 
-class DelayedJobRailtie < Rails::Railtie
+class DelayedJobEngine < Rails::Engine
   initializer "precompile whoops assets" do |app|
     app.config.assets.precompile += ["delayed.js", "delayed.css"]
   end
