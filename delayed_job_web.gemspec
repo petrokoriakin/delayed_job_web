@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{delayed_job_web}
-  s.version = "1.0.3"
+  s.version = "1.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Erick Schmitt"]
@@ -18,36 +18,7 @@ Gem::Specification.new do |s|
     "LICENSE.txt",
     "README.markdown"
   ]
-  s.files = [
-    ".document",
-    "Gemfile",
-    "LICENSE.txt",
-    "README.markdown",
-    "Rakefile",
-    "VERSION",
-    "bin/delayed_job_web",
-    "delayed_job_web.gemspec",
-    "lib/delayed_job_web.rb",
-    "lib/delayed_job_web/application/app.rb",
-    "lib/delayed_job_web/application/public/images/poll.png",
-    "lib/delayed_job_web/application/public/javascripts/application.js",
-    "lib/delayed_job_web/application/public/javascripts/jquery-1.7.1.min.js",
-    "lib/delayed_job_web/application/public/javascripts/jquery.relatize_date.js",
-    "lib/delayed_job_web/application/public/stylesheets/reset.css",
-    "lib/delayed_job_web/application/public/stylesheets/style.css",
-    "lib/delayed_job_web/application/views/enqueued.haml",
-    "lib/delayed_job_web/application/views/error.haml",
-    "lib/delayed_job_web/application/views/failed.haml",
-    "lib/delayed_job_web/application/views/job.haml",
-    "lib/delayed_job_web/application/views/layout.haml",
-    "lib/delayed_job_web/application/views/next_more.haml",
-    "lib/delayed_job_web/application/views/overview.haml",
-    "lib/delayed_job_web/application/views/pending.haml",
-    "lib/delayed_job_web/application/views/stats.haml",
-    "lib/delayed_job_web/application/views/working.haml",
-    "test/helper.rb",
-    "test/test_delayed_job_web.rb"
-  ]
+
   s.homepage = %q{http://github.com/ejschmitt/delayed_job_web}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
